@@ -9,19 +9,47 @@ function normalizePlayerSelection(playerSelection) {
 }
 
 function playRound(playerSelection, computerSelection) {
-    nps = normalizePlayerSelection(playerSelection);
-
-    if (nps == computerSelection) {
-      return "Tie!"
-    } else if ((nps == "Rock" && computerSelection == "Scissors") ||
-        (nps == "Paper" && computerSelection == "Rock") ||
-        (nps == "Scissors" && computerSelection == "Paper")) {
-      return `You win! ${nps} beats ${computerSelection}`;
+    if (playerSelection == computerSelection) {
+      return 0;
+    } else if ((playerSelection == "Rock" && computerSelection == "Scissors") ||
+        (playerSelection == "Paper" && computerSelection == "Rock") ||
+        (playerSelection == "Scissors" && computerSelection == "Paper")) {
+      return 1;
     } else {
-      return `You lose! ${computerSelection} beats ${nps}`;
+      return -1;
     }
 }
-   
-const playerSelection = "rock";
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+
+function game() {
+  let playerSelection;
+  let computerSelection;
+  let result;
+  let tieCount = 0;
+  let playerWin = 0;
+  let computerWin = 0;
+
+  for (let round = 0; round < 5; round++) {
+    do {
+      playerSelection = normalizePlayerSelection(prompt("Rock, Paper, or Scissors?"));
+    } while (!rps_options.includes(playerSelection));
+
+    computerSelection = getComputerChoice();
+
+    result = playRound(playerSelection, computerSelection);
+
+    if (result == 0) {
+      tieCount++;
+      console.log('Tie!');
+    } else if (result > 0) {
+      playerWin++;
+      console.log(`You win! ${playerSelection} beats ${computerSelection}`);
+    } else {
+      computerWin++;
+      console.log(`You lose! ${computerSelection} beats ${playerSelection}`)
+    }
+  }
+
+  console.log(`You won ${playerWin} games, the computer won ${computerWin} games, and there were ${tieCount} ties`);
+}
+
+game();
