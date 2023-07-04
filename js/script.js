@@ -23,15 +23,12 @@ function playRound(playerSelection, computerSelection) {
 let playerWin = 0;
 let computerWin = 0;
 let tieCount = 0;
-let gameOver = 0;
 
 function buttonPress(e) {
   let playerSelection;
   let computerSelection;
   let result;
   
-  if (gameOver) return;
-
   playerSelection = normalizePlayerSelection(this.id);
   computerSelection = getComputerChoice();
   
@@ -61,7 +58,7 @@ function showScore() {
       score += ' COMPUTER WINS THE GAME!!';
     }
     
-    gameOver = 1;
+    buttons.forEach(button => button.removeEventListener('click', buttonPress));
   }
 
   scoreDiv.textContent = score;
