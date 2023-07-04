@@ -20,36 +20,63 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game() {
+let playerWin = 0;
+let computerWin = 0;
+let tieCount = 0;
+let gameOver = 0;
+
+function buttonPress(e) {
   let playerSelection;
   let computerSelection;
   let result;
-  let tieCount = 0;
-  let playerWin = 0;
-  let computerWin = 0;
+  
+  if (gameOver) return;
 
-  for (let round = 0; round < 5; round++) {
-    do {
-      playerSelection = normalizePlayerSelection(prompt("Rock, Paper, or Scissors?"));
-    } while (!rps_options.includes(playerSelection));
-
-    computerSelection = getComputerChoice();
-
-    result = playRound(playerSelection, computerSelection);
-
-    if (result == 0) {
-      tieCount++;
-      console.log('Tie!');
-    } else if (result > 0) {
-      playerWin++;
-      console.log(`You win! ${playerSelection} beats ${computerSelection}`);
-    } else {
-      computerWin++;
-      console.log(`You lose! ${computerSelection} beats ${playerSelection}`)
-    }
+  playerSelection = normalizePlayerSelection(this.id);
+  computerSelection = getComputerChoice();
+  
+  result = playRound(playerSelection, computerSelection);
+ 
+  if (result == 0) {
+    tieCount++;
+    messageDiv.textContent = 'Tie!';
+  } else if (result > 0) {
+    playerWin++;
+    messageDiv.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+  } else {
+    computerWin++;
+    messageDiv.textContent = `You lose! ${computerSelection} beats ${playerSelection}`;
   }
-
-  console.log(`You won ${playerWin} games, the computer won ${computerWin} games, and there were ${tieCount} ties`);
+  
+  showScore();
 }
 
-game();
+function showScore() {
+  let score = `Wins: Player ${playerWin}, Computer ${computerWin}, Ties ${tieCount}`;
+
+  if (playerWin >= 5 || computerWin >= 5) {
+    if (playerWin > computerWin) {
+      score += ' YOU WIN THE GAME!!';
+    } else {
+      score += ' COMPUTER WINS THE GAME!!';
+    }
+    
+    gameOver = 1;
+  }
+
+  scoreDiv.textContent = score;
+}
+
+const body = document.querySelector('body');
+
+const messageDiv = document.createElement('div');
+messageDiv.textContent = 'Press button to play!';
+
+const scoreDiv = document.createElement('div');
+showScore();
+
+body.appendChild(messageDiv);
+body.appendChild(scoreDiv);
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach(button => button.addEventListener('click', buttonPress));
